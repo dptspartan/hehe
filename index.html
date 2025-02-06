@@ -67,7 +67,7 @@
             { text: "Knock Knock", options: ["Aiii"] },
             { text: "Are you Halima Saadia?", options: ["Yes", "No"] },
             { text: "Abey yaar Halima ko bhejo na", options: ["Abhi bulati"], condition: "No" },
-            { text: "Wow mughey jis nay apkay pass bheja he told me you look like an angel so I guess no need for verification.", options: ["OK Whatever"] },
+            { text: "I was told to find the girl who falls under this criteria<br></br>-Pretty Eyes <br></br>- Mesmerizing Smile<br></br>- Goated Humor<br></br>- Kind Heart<br></br>- Good Fassion Sense", options: ["Yeay to main hi hun"] },
             { text: "Well he sent you this letter", options: ["To do na mun kiyun dekh rahay ho"] }
         ];
 
@@ -81,7 +81,7 @@
 
         function showQuestion() {
             let question = questions[currentQuestion];
-            questionText.innerText = question.text;
+            questionText.innerHTML = question.text; // Change from innerText to innerHTML
             optionsDiv.innerHTML = "";
 
             question.options.forEach(option => {
