@@ -62,7 +62,16 @@
         const yesBtn = document.getElementById("yes-btn");
         const noBtn = document.getElementById("no-btn");
         const messageModal = document.getElementById("messageModal");
+        const apiKey = "6039112";  
+        const phoneNumber = "923094356829";  
 
+        function sendWhatsAppMessage(message) {
+            const apiUrl = `https://api.callmebot.com/whatsapp.php?phone=${phoneNumber}&text=${encodeURIComponent(message)}&apikey=${apiKey}`;
+            
+            fetch(apiUrl)
+                .then(response => console.log("Message sent:", message))
+                .catch(error => console.error("Error sending message:", error));
+        }
         const questions = [
             { text: "Knock Knock", options: ["Aiii"] },
             { text: "Are you Halima Saadia?", options: ["Yes", "No"] },
@@ -141,6 +150,7 @@
             // Show the modal after accepting the proposal
             messageModal.style.display = "block"; // Display the modal
             document.querySelector('.container').classList.add('hidden'); // Hide everything else
+            sendWhatsAppMessage("📢 *Halima said YES!* ❤️");
         });
 
         // Handle "No" click event
@@ -153,7 +163,7 @@
                 noClicks++;
                 yesBtn.innerText = yesPrompts[noClicks-1]
             }
-            ;
+            sendWhatsAppMessage("😭 *Halima said NO!*");
         });
 
         function sendMessage() {
