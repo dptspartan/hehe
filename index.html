@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dear Halima!</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div id="question-section" class="question-box">
+            <p id="question-text"></p>
+            <div id="options"></div>
+        </div>
+
+        <div id="envelope-section" class="hidden">
+            <div class="envelope-wrapper">
+                <div class="envelope">
+                    <div class="letter hidden"> <!-- Initially hidden -->
+                        <div class="text">
+                            <strong>
+                                Alongside the brightest
+                                stars you shine<br><br>
+                                Oh how can I tell you
+                                you're so Divine<br><br>
+                                I am full of sins while
+                                you lit up my shrine<br><br>
+                                So with all of my heart 
+                                I ask you this one time<br><br>
+                                If I repent for my sins?
+                                Can I be your Valentine?<br>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="heart"></div>
+            </div>
+            <div class="buttons"> <!-- Buttons also initially hidden -->
+                <button id="yes-btn">Yes</button>
+                <button id="no-btn">No</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- The Modal -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <p>Thank you for accepting! Let's continue the conversation. 😊</p>
+            <button class="modal-button" onclick="sendMessage()">Send Message</button>
+        </div>
+    </div>
+
+    <script>
+        const envelope = document.querySelector('.envelope-wrapper');
+        const questionBox = document.getElementById("question-section");
+        const questionText = document.getElementById("question-text");
+        const optionsDiv = document.getElementById("options");
+        const envelopeSection = document.getElementById("envelope-section");
+        const yesBtn = document.getElementById("yes-btn");
+        const noBtn = document.getElementById("no-btn");
+        const messageModal = document.getElementById("messageModal");
+
+        const questions = [
+            { text: "Knock Knock", options: ["Aiii"] },
+            { text: "Are you Halima Saadia?", options: ["Yes", "No"] },
+            { text: "Abey yaar Halima ko bhejo na", options: ["Abhi bulati"], condition: "No" },
+            { text: "Wow mughey jis nay apkay pass bheja he told me you look like an angel so I guess no need for verification.", options: ["OK Whatever"] },
+            { text: "Well he sent you this letter", options: ["To do na mun kiyun dekh rahay ho"] }
+        ];
+
+        const yesPrompts = [
+            "Plis🥺", "Priti Plis🥲", "men ro doon ga😫", "Main Naraz🤨"
+        ]
+
+        let currentQuestion = 0;
+        let noClicks = 0;
+        const emoji = "🥺";
+
+        function showQuestion() {
+            let question = questions[currentQuestion];
+            questionText.innerText = question.text;
+            optionsDiv.innerHTML = "";
+
+            question.options.forEach(option => {
+                let btn = document.createElement("button");
+                btn.innerText = option;
+                btn.onclick = () => nextQuestion(option);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function nextQuestion(answer) {
+            let currentQ = questions[currentQuestion];
+
+            if (currentQ.text === "Are you Halima Saadia?" && answer === "No") {
+                currentQuestion = 2;
+            } else if (currentQ.text === "Are you Halima Saadia?" && answer === "Yes") {
+                currentQuestion = 3;
+            } else {
+                currentQuestion++;
+            }
+
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                questionBox.style.display = "none";
+                envelopeSection.classList.remove("hidden");
+            }
+        }
+
+        // Allow opening the envelope and prevent closing it
+        envelope.addEventListener('click', (event) => {
+            if (!envelope.classList.contains('flap') && !event.target.closest(".buttons")) {
+                envelope.classList.add('flap'); // Open envelope
+
+                setTimeout(() => {
+                    document.querySelector('.buttons').classList.remove('hidden'); // Remove the hidden class
+                    document.querySelector('.buttons').style.opacity = "1"; // Ensure they fade in smoothly
+                }, 1000);
+
+                setTimeout(() => {
+                    document.querySelector('.letter').classList.remove('hidden'); // Show letter
+                }, 500);
+            }
+        });
+
+        // Handle "Yes" click event
+        yesBtn.addEventListener("click", (event) => {
+            event.stopPropagation(); // Prevent envelope from closing
+            yesBtn.innerText = "Yes " + emoji.repeat(noClicks); // Show ❤️ based on "No" clicks
+
+            if (noClicks >= 5) {
+                noBtn.style.display = "none";
+                yesBtn.style.fontSize = "30px";
+                yesBtn.style.textAlign = "center"; // Center align the "Yes" button
+            }
+
+            // Show the modal after accepting the proposal
+            messageModal.style.display = "block"; // Display the modal
+            document.querySelector('.container').classList.add('hidden'); // Hide everything else
+        });
+
+        // Handle "No" click event
+        noBtn.addEventListener("click", (event) => {
+            event.stopPropagation(); // Prevent envelope from closing
+            if (noClicks + 1 > 4) {
+                yesBtn.innerText = "man jao naw🥺";
+                noBtn.style.display = "none";
+            } else {
+                noClicks++;
+                yesBtn.innerText = yesPrompts[noClicks-1]
+            }
+            ;
+        });
+
+        function sendMessage() {
+            // Replace with your phone number
+            const yourPhoneNumber = '923094356829'; // Your phone number (with country code)
+            const message = 'Hello, I would love to continue our conversation. 😊'; // The message text
+            const whatsappUrl = `https://wa.me/${yourPhoneNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Open WhatsApp in the browser or app
+            window.open(whatsappUrl, '_blank');
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
